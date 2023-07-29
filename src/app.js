@@ -1,31 +1,49 @@
 import express from 'express';
 import dotenv from 'dotenv'
+import { Server } from 'http';
+import 'reflect-metadata';
+import { AuthRouter } from './routes/authRoutes.js';
+import mongoose from 'mongoose';
+
 
 export class App {
-    app;
+    _app;
     _PORT;
-    router;
+    _router;
+    _server;
     constructor() {
-        this.app = express();
-        this.router = express.Router()
-        this._PORT = dotenv.config().parsed?.BASE_URL;
+        this._app = express();
+        this._router = express.Router()
+        this._PORT = dotenv.config().parsed?.BASE_PORT;
+        this._server = Server;
     }
 
     useRoutes() {
-
+        const authRoutes = new AuthRouter(this._router).getRoutes()
+        this._app.use('/', authRoutes)
+        
     }
 
     useMiddleWare() {
-
+        this._app.use(express.json());
+        this._app.use(express.urlencoded());
     }
 
     useDB() {
 
+        const database = process.env.MONGOLAB_URI;
+        mongoose
+        .connect(database, { useUnifiedTopology: true, useNewUrlParser: true })
+        .then(() => console.log("e don connect"))
+        .catch((err) => console.log(err));
+
     }
 
     init() {
-        this.useMiddleWare()
-        this.app.listen(this._PORT, () => {
+        this.useMiddleWare();
+        this.useRoutes();
+        this.useDB();
+        this._app.listen(this._PORT, () => {
             console.log(`Server is working on http://locahost:${this._PORT}`)
         })
     }
