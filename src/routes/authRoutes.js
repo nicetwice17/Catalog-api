@@ -1,4 +1,6 @@
 import { User } from '../model/user.js'
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 export class AuthRouter {
   _router;
@@ -24,10 +26,10 @@ export class AuthRouter {
         if (oldUser) {
           return res.status(409).send("User Already Exist. Please Login");
         }
-
+       
         //Encrypt user password
-        encryptedPassword = await bcrypt.hash(password, 10);
-
+        const encryptedPassword = await bcrypt.hash(password, 10);
+     
         // Create user in our database
         const user = await User.create({
           first_name,
@@ -51,7 +53,7 @@ export class AuthRouter {
         res.status(201).json(user);
 
 
-      } catch(e) {
+      } catch(err) {
         console.log(err);
       }
     });

@@ -36,7 +36,6 @@ export class App {
         .connect(database, { useUnifiedTopology: true, useNewUrlParser: true })
         .then(() => console.log("e don connect"))
         .catch((err) => console.log(err));
-
     }
 
     init() {
