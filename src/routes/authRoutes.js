@@ -1,6 +1,7 @@
 import { User } from '../model/user.js'
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
 
 export class AuthRouter {
   _router;
@@ -21,9 +22,9 @@ export class AuthRouter {
 
         // check if user already exist
         // Validate if user exist in our database
-        const oldUser = await User.findOne({ email });
+        const existUser = await User.findOne({ email });
 
-        if (oldUser) {
+        if (existUser) {
           return res.status(409).send("User Already Exist. Please Login");
         }
        
@@ -41,7 +42,7 @@ export class AuthRouter {
         // Create token
         const token = jwt.sign(
           { user_id: user._id, email },
-          process.env.TOKEN_KEY,
+          dotenv.config().parsed?.SECRET_KEY,
           {
             expiresIn: "2h",
           }
