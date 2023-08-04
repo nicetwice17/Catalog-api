@@ -58,7 +58,7 @@ export class AuthController {
     async login(req, res) {
          // Get user input
       const { email, password } = req.body;
-
+      console.log(req.body)
       try {
         if (!( email && password )) {
           res.status(400).send('All inputs is required');

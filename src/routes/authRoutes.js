@@ -1,6 +1,5 @@
 import { AuthController } from "../controller/authController.js";
 
-
 export class AuthRouter {
   _router;
   constructor(router) {
@@ -12,9 +11,8 @@ export class AuthRouter {
       
     this._router.post("/register", controller.register);
       
-    // Login
     this._router.post("/login", controller.login);
-
+    
     return this._router
   }
 } 
