@@ -70,7 +70,7 @@ export class ProductsController {
         // We sort the data by the date of their creation in descending order (user 1 instead of -1 to get ascending order)
         .sort({ createdAt: -1 })
          
-        res.status(201).json(products);
+        res.status(200).json(products);
        } catch (err) {
         console.log(err);
         res.status(400).json('Products Not found')
