@@ -14,7 +14,7 @@ export class ProductsController {
             dateTo,
             oldPrice,
             newPrice,
-            createdDate,
+            createdAt,
             discount 
         } = req.body;
       
@@ -46,7 +46,7 @@ export class ProductsController {
         // Create product in our database
         const product = await Product.create({ 
             ...req.body,
-            createdDate: !createdDate ? new Date() : createdDate
+            createdAt: !createdAt ? new Date() : createdAt
          });
 
         // return new product
@@ -58,4 +58,23 @@ export class ProductsController {
         res.status(400).json('Can not create product')
       }
     }
+
+    async getProducts(req, res) {
+       const { page, limit } = req.query;
+       try {
+        const products = await Product.find({  })
+        // We multiply the "limit" variables by one just to make sure we pass a number and not a string
+        .limit(limit * 1)
+        // I don't think i need to explain the math here
+        .skip((page - 1) * limit)
+        // We sort the data by the date of their creation in descending order (user 1 instead of -1 to get ascending order)
+        .sort({ createdAt: -1 })
+         
+        res.status(201).json(products);
+       } catch (err) {
+        console.log(err);
+        res.status(400).json('Products Not found')
+       }
+    }
+
 }

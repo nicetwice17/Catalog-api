@@ -9,7 +9,9 @@ export class ProductsRouter {
 
   getRoutes() {
     const controller = new ProductsController();
-      
+    
+    this._router.post("/list", verifyJwtToken, controller.getProducts);
+    
     this._router.post("/create", verifyJwtToken, controller.createProduct);
     
     return this._router
