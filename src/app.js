@@ -4,6 +4,7 @@ import { Server } from 'http';
 import 'reflect-metadata';
 import { AuthRouter } from './routes/authRoutes.js';
 import mongoose from 'mongoose';
+import { ProductsRouter } from './routes/productsRoutes.js';
 
 
 export class App {
@@ -19,8 +20,10 @@ export class App {
     }
 
     useRoutes() {
-        const authRoutes = new AuthRouter(this._router).getRoutes()
-        this._app.use('/', authRoutes)
+        const authRoutes = new AuthRouter(this._router).getRoutes();
+        const productsRoutes = new ProductsRouter(this._router).getRoutes();
+        this._app.use('/', authRoutes);
+        this._app.use('/products', productsRoutes)
         
     }
 
