@@ -73,41 +73,58 @@ export class ProductsController {
         discount 
     } = req.body;
 
-    const { id } = req.query;
+    const { id } = req.params;
 
-    try {
-      if (!id) {
-        res.status(404).send("Product by current id not found");
+      try {
+        if (!id) {
+          res.status(404).send("Product by current id not found");
+        }
+
+        if (!(
+          discountName &&
+          discountType &&
+          productType &&
+          shopType &&
+          name &&
+          dateFrom &&
+          dateTo &&
+          oldPrice &&
+          newPrice &&
+          discount
+          )) {
+          res.status(400).send("All input is required");
+        }
+
+        // update product in our database
+        await Product.updateOne(req.body);
+        // get updated product to return
+        const product = await Product.findById(id);
+
+        res.status(201).json(product);
+
+      } catch (err) {
+        console.log(err);
+        res.status(400).json('Can not update product')
       }
-
-      if (!(
-        discountName &&
-        discountType &&
-        productType &&
-        shopType &&
-        name &&
-        dateFrom &&
-        dateTo &&
-        oldPrice &&
-        newPrice &&
-        discount
-        )) {
-        res.status(400).send("All input is required");
-      }
-
-       // update product in our database
-       await Product.updateOne(req.body);
-       // get updated product to return
-       const product = await Product.findById(id);
-
-       res.status(201).json(product);
-
-    } catch (err) {
-
     }
 
-
+    async deleteProduct(req, res) {
+      const { id } = req.params;
       
+      try {
+        if (!id) {
+          res.status(404).send("Product by current id not found");
+        }
+
+        // delete product in database
+        await Product.deleteOne({ _id: id }).then(() => {
+          res.status(201).json(`Product with id: ${id} deleted`);
+        });
+
+      } catch (err) {
+        console.log(err);
+        res.status(400).json('Can not update product')
+      }
     }
 
     async getProducts(req, res) {
@@ -131,7 +148,7 @@ export class ProductsController {
     }
 
     async getProduct(req, res) {
-      const { id } = req.query;
+      const { id } = req.params;
 
       try {
        // get product by id from database

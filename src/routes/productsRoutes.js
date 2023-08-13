@@ -12,12 +12,14 @@ export class ProductsRouter {
     
     this._router.post("/list", verifyJwtToken, controller.getProducts);
 
-    this._router.get("/product", verifyJwtToken, controller.getProduct);
+    this._router.get("/product/:id", verifyJwtToken, controller.getProduct);
     
     this._router.post("/create", verifyJwtToken, controller.createProduct);
 
-    this._router.put("/update", verifyJwtToken, controller.updateProduct);
+    this._router.put("/update/:id", verifyJwtToken, controller.updateProduct);
     
+    this._router.delete("/delete/:id", verifyJwtToken, controller.deleteProduct);
+
     return this._router
   }
 } 
