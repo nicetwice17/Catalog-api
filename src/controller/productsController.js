@@ -59,8 +59,60 @@ export class ProductsController {
       }
     }
 
+    async updateProduct(req, res) {
+      const { 
+        discountName,
+        discountType,
+        productType,
+        shopType,
+        name,
+        dateFrom,
+        dateTo,
+        oldPrice,
+        newPrice,
+        discount 
+    } = req.body;
+
+    const { id } = req.query;
+
+    try {
+      if (!id) {
+        res.status(404).send("Product by current id not found");
+      }
+
+      if (!(
+        discountName &&
+        discountType &&
+        productType &&
+        shopType &&
+        name &&
+        dateFrom &&
+        dateTo &&
+        oldPrice &&
+        newPrice &&
+        discount
+        )) {
+        res.status(400).send("All input is required");
+      }
+
+       // update product in our database
+       await Product.updateOne(req.body);
+       // get updated product to return
+       const product = await Product.findById(id);
+
+       res.status(201).json(product);
+
+    } catch (err) {
+
+    }
+
+
+      
+    }
+
     async getProducts(req, res) {
        const { page, limit } = req.query;
+
        try {
         const products = await Product.find({  })
         // We multiply the "limit" variables by one just to make sure we pass a number and not a string
@@ -75,6 +127,22 @@ export class ProductsController {
         console.log(err);
         res.status(400).json('Products Not found')
        }
+
     }
+
+    async getProduct(req, res) {
+      const { id } = req.query;
+
+      try {
+       // get product by id from database
+       const product = await Product.findById(id);
+
+       res.status(200).json(product);
+      } catch (err) {
+       console.log(err);
+       res.status(400).json('Product Not found')
+      }
+
+   }
 
 }
