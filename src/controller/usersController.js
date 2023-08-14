@@ -24,7 +24,7 @@ export class UsersController {
     async getUser(req, res) {
         const { id } = req.params;
         try {
-            const user = await User.findById(id);
+            const user = await User.findBy(id);
          
             res.status(200).json(user);
         } catch (err) {

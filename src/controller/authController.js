@@ -32,6 +32,7 @@ export class AuthController {
           first_name,
           last_name,
           email: email.toLowerCase(), // sanitize: convert email to lowercase
+          createdAt: new Date();
           password: encryptedPassword,
         });
 
