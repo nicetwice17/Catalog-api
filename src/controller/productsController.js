@@ -96,7 +96,7 @@ export class ProductsController {
         }
 
         // update product in our database
-        await Product.updateOne(req.body);
+        await Product.updateOne({ _id: id }, req.body);
         // get updated product to return
         const product = await Product.findById(id);
 
