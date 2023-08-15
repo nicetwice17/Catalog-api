@@ -122,8 +122,8 @@ export class ProductsController {
         });
 
       } catch (err) {
-        console.log(err);
-        res.status(400).json('Can not update product')
+          console.log(err);
+          res.status(400).json('Can not delete product')
       }
     }
 

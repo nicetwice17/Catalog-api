@@ -14,7 +14,9 @@ export class UsersRouter {
       
     this._router.get("/user/:id", verifyJwtToken, controller.getUser);
 
-    this._router.put("/user/update/:id", verifyJwtToken, controller.updateUser)
+    this._router.put("/user/update/:id", verifyJwtToken, controller.updateUser);
+
+    this._router.delete("/user/delete/:id", verifyJwtToken, controller.deleteUser)
     
     return this._router
   }
