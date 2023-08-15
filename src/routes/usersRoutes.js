@@ -1,4 +1,5 @@
 import { UsersController } from "../controller/usersController.js";
+import { verifyJwtToken } from "../middleWares/auth.js";
 
 export class UsersRouter {
   _router;
@@ -9,9 +10,11 @@ export class UsersRouter {
   getRoutes() {
     const controller = new UsersController();
       
-    this._router.get("/list", controller.getUsers);
+    this._router.get("/list", verifyJwtToken, controller.getUsers);
       
-    this._router.get("/user/:id", controller.getUser);
+    this._router.get("/user/:id", verifyJwtToken, controller.getUser);
+
+    this._router.put("/user/update/:id", verifyJwtToken, controller.updateUser)
     
     return this._router
   }

@@ -3,6 +3,22 @@ import { User } from "../model/user.js";
 export class UsersController {
     constructor() {}
 
+    async updateUser(req, res) {
+        const { id } = req.params;
+
+        try {
+            // update user in our database
+            await User.updateOne({ _id: id }, req.body);
+            // get updated product to return
+            const user = await User.findById(id);
+
+            res.status(201).json(user);
+        } catch (err) {
+            console.log(err);
+            res.status(400).json("Could'nt update user")
+        }
+    }
+
     async getUsers(req, res) {
         const { page, limit } = req.query;
         try {
